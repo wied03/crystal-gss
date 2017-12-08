@@ -19,9 +19,10 @@ lib GssLib
   alias MinorStatusPtr = UInt32*
   alias MajorStatus = UInt32
   type CredentialStruct = Void*
+  GSS_C_BOTH = 0
+  GSS_C_INITIATE = 1
+  GSS_C_ACCEPT = 2
   alias GssCredentialUsageFlags = Int32
-
-  GSS_INITIATE = 1
 
   # https://github.com/crystal-lang/crystal/issues/4845
   # $gss_c_nt_user_name = __gss_c_nt_user_name_oid_desc : Oid

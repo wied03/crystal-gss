@@ -67,7 +67,7 @@ def acquire_credential(password, target_name)
                                                  pointerof(buffer),
                                                  0, # default time of 0
                                                  pointerof(desired_mechanisms),
-                                                 GssLib::GSS_INITIATE,
+                                                 GssLib::GSS_C_INITIATE,
                                                  out credential,
                                                  nil,
                                                  nil)
