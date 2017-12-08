@@ -32,11 +32,10 @@ def handle_status(function,
   raise "While calling #{function}, encountered the following errors: #{problems}"
 end
 
-def get_name()
+def get_name(upn)
   buffer = KrbWrapper::Buffer.new
-  spn = "someone@FOO.COM"
-  buffer.value = spn
-  buffer.length = spn.size
+  buffer.value = upn
+  buffer.length = upn.size
   minor_status = uninitialized UInt32
   minor_pointer = pointerof(minor_status)
   status = KrbWrapper.gss_import_name(minor_pointer,
@@ -72,7 +71,7 @@ def acquire_credential(password, target_name)
 end
 
 def do_stuff
-  target_name = get_name
+  target_name = get_name("someone@FOO.COM")
   target_name_pointer = pointerof(target_name)
   minor_status = uninitialized UInt32
   minor_pointer = pointerof(minor_status)
