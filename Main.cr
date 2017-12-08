@@ -32,7 +32,7 @@ end
 
 def get_name()
   buffer = KrbWrapper::Buffer.new
-  spn = "mule@FOO.COM"
+  spn = "someone@FOO.COM"
   buffer.value = spn
   buffer.length = spn.size
   minor_status = uninitialized UInt32
