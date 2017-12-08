@@ -20,6 +20,12 @@ lib KrbWrapper
                       buffer : Buffer*,
                       oid : Oid*,
                       output_name : NameStruct*) : Int32
+
+  fun gss_release_buffer(minor_status_ptr : Int32*,
+                         buffer : Buffer*) : Int32
+
+  fun gss_release_name(minor_status_ptr : Int32*,
+                       buffer : NameStruct*) : Int32
 end
 
 @[Link("bwwrapper")]
