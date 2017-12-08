@@ -86,6 +86,7 @@ def do_stuff
     credential = acquire_credential("thePassword", target_name)
     begin
       puts "Got credential OK!"
+      # TODO: Create context, get token, etc.
     ensure
       puts "Releasing credential"
       status = GssLib.gss_release_cred(minor_pointer,
