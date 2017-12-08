@@ -23,6 +23,7 @@ begin
   desired_mechanisms = KrbWrapper::OidSet.new
   desired_mechanisms.count = 1
   desired_mechanisms.elements = BswWrapper.bsw_gss_krb5_mechanism
+  puts "Calling gss_acquire_cred_with_password"
   status = KrbWrapper.gss_acquire_cred_with_password(minor_pointer,
                                                      target_name_pointer,
                                                      pointerof(buffer),
