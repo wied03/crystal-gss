@@ -11,20 +11,23 @@ def handle_status(function,
   message_context = UInt32.new(0)
   buffer = KrbWrapper::Buffer.new
   problems = [] of String
-  # TODO: Need to check minor status with 2 instead of 1 for the type
-  while 1
-    major_status = KrbWrapper.gss_display_status(minor_status_for_disp_status_ptr,
-                                                 major_status,
-                                                 1,
-                                                 pointerof(mech_oid),
-                                                 pointerof(message_context),
-                                                 pointerof(buffer))
-    raise "Unable to even get error status!" unless major_status == 0
-    problems << "While calling #{function}, #{String.new(buffer.value)}"
-    KrbWrapper.gss_release_buffer(minor_status_for_disp_status_ptr, pointerof(buffer)) if buffer.length != 0
-    break if message_context == 0
-  end
-  raise "Errors: #{problems}"
+  capture_issues = ->(status_type: Int32, code: UInt32) {
+    while 1
+      major_status = KrbWrapper.gss_display_status(minor_status_for_disp_status_ptr,
+                                                   code,
+                                                   status_type,
+                                                   pointerof(mech_oid),
+                                                   pointerof(message_context),
+                                                   pointerof(buffer))
+      raise "Unable to even get error status!" unless major_status == 0
+      problems << String.new(buffer.value)
+      KrbWrapper.gss_release_buffer(minor_status_for_disp_status_ptr, pointerof(buffer)) if buffer.length != 0
+      break if message_context == 0
+    end
+  }
+  capture_issues.call(1, major_status)
+  capture_issues.call(2, minor_status)
+  raise "While calling #{function}, encountered the following errors: #{problems}"
 end
 
 def get_name()
