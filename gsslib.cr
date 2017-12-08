@@ -63,6 +63,6 @@ end
 @[Link("bwwrapper")]
 lib BswWrapper
   # See comments above
-  fun bsw_gss_nt_user_name : GssLib::Oid*
-  fun bsw_gss_krb5_mechanism : GssLib::Oid*
+  fun gss_nt_user_name : GssLib::Oid*
+  fun gss_krb5_mechanism : GssLib::Oid*
 end

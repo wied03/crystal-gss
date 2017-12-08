@@ -45,7 +45,7 @@ def get_name(upn)
   # TODO: Can Crystal do currying and improve how we call this stuff?
   status = GssLib.gss_import_name(minor_pointer,
                                   pointerof(buffer),
-                                  BswWrapper.bsw_gss_nt_user_name,
+                                  BswWrapper.gss_nt_user_name,
                                   out target_name)
   handle_status("gss_import_name", status, minor_status)
   target_name
@@ -60,7 +60,7 @@ def acquire_credential(password, target_name)
 
   desired_mechanisms = GssLib::OidSet.new
   desired_mechanisms.count = 1
-  desired_mechanisms.elements = BswWrapper.bsw_gss_krb5_mechanism
+  desired_mechanisms.elements = BswWrapper.gss_krb5_mechanism
   puts "Calling gss_acquire_cred_with_password"
   status = GssLib.gss_acquire_cred_with_password(minor_pointer,
                                                  target_name,
