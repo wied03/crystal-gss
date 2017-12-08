@@ -10,6 +10,7 @@ def handle_status(function,
   mech_oid = uninitialized KrbWrapper::Oid
   message_context = UInt32.new(0)
   buffer = KrbWrapper::Buffer.new
+  buffer_pointer = pointerof(buffer)
   problems = [] of String
   capture_issues = ->(status_type: Int32,
                       status_desc: String,
@@ -20,11 +21,11 @@ def handle_status(function,
                                                    status_type,
                                                    pointerof(mech_oid),
                                                    pointerof(message_context),
-                                                   pointerof(buffer))
+                                                   buffer_pointer)
       raise "Unable to even get error status!" unless major_status == 0
       problems << "#{status_desc} error code: #{code} - details: #{String.new(buffer.value)}"
       KrbWrapper.gss_release_buffer(minor_status_for_disp_status_ptr,
-                                    pointerof(buffer)) if buffer.length != 0
+                                    buffer_pointer) if buffer.length != 0
       break if message_context == 0
     end
   end
