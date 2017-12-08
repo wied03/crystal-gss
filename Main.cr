@@ -1,6 +1,6 @@
 require "./krbwrapper"
 
-# TODO: Can this be moved into the lib wrapper??
+# TODO: Can/should this be moved into the lib wrapper??
 def handle_status(function,
                   major_status,
                   minor_status)
@@ -72,6 +72,7 @@ end
 
 def do_stuff
   target_name = get_name("someone@FOO.COM")
+  # TODO: Can we wrap this and have some type of finalizer/disposer?
   target_name_pointer = pointerof(target_name)
   minor_status = uninitialized UInt32
   minor_pointer = pointerof(minor_status)
