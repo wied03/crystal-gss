@@ -25,21 +25,21 @@ lib KrbWrapper
   # $gss_c_nt_user_name = __gss_c_nt_user_name_oid_desc : Oid
 
   # output_name is a pointer of a pointer
-  fun gss_import_name(minor_status_ptr : Int32*,
+  fun gss_import_name(minor_status_ptr : UInt32*,
                       buffer : Buffer*,
                       oid : Oid*,
-                      output_name : NameStruct*) : Int32
+                      output_name : NameStruct*) : UInt32
 
-  fun gss_release_buffer(minor_status_ptr : Int32*,
-                         buffer : Buffer*) : Int32
+  fun gss_release_buffer(minor_status_ptr : UInt32*,
+                         buffer : Buffer*) : UInt32
 
-  fun gss_release_name(minor_status_ptr : Int32*,
-                       name : NameStruct*) : Int32
+  fun gss_release_name(minor_status_ptr : UInt32*,
+                       name : NameStruct*) : UInt32
 
-  fun gss_release_cred(minor_status_ptr : Int32*,
-                       cred : CredentialStruct*) : Int32
+  fun gss_release_cred(minor_status_ptr : UInt32*,
+                       cred : CredentialStruct*) : UInt32
 
-  fun gss_acquire_cred_with_password(minor_status_ptr : Int32*,
+  fun gss_acquire_cred_with_password(minor_status_ptr : UInt32*,
                                      name : NameStruct,
                                      password: Buffer*,
                                      time: Int32,
@@ -47,7 +47,14 @@ lib KrbWrapper
                                      cred_usage: GssCredentialUsageFlags,
                                      credential_id: CredentialStruct*,
                                      actual_mechs: OidSet**,
-                                     time_rec: Int32*) : Int32
+                                     time_rec: Int32*) : UInt32
+
+  fun gss_display_status(minor_status_ptr : UInt32*,
+                         status_code : UInt32,
+                         status_type : Int32,
+                         mechanism_type: Oid*,
+                         message_context: UInt32*,
+                         buffer : Buffer*) : UInt32
 end
 
 @[Link("bwwrapper")]
