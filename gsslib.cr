@@ -61,7 +61,7 @@ lib GssLib
 end
 
 @[Link("bwwrapper")]
-lib BswWrapper
+lib GssExternVariableFetcher
   # See comments above
   fun gss_nt_user_name : GssLib::Oid*
   fun gss_krb5_mechanism : GssLib::Oid*
