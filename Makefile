@@ -1,8 +1,7 @@
-kerbclient: Main.cr bin
-	crystal build Main.cr -o bin/kerbclient
+kerbclient: Main.cr krbwrapper.cr
+	mkdir -p bin && PKG_CONFIG_PATH=/usr/local/opt/heimdal/lib/pkgconfig crystal build Main.cr -o bin/kerbclient
 
-bin:
-	mkdir -p bin
+test: test.c
 
 clean:
 	rm -rf bin
