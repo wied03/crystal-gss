@@ -12,6 +12,9 @@ lib KrbWrapper
 
   type NameStruct = Void*
 
+  # https://github.com/crystal-lang/crystal/issues/4845
+  # $gss_c_nt_user_name = __gss_c_nt_user_name_oid_desc : Oid
+
   # output_name is a pointer of a pointer
   fun gss_import_name(minor_status_ptr : Int32*,
                       buffer : Buffer*,
@@ -21,5 +24,6 @@ end
 
 @[Link("bwwrapper")]
 lib BswWrapper
+  # See comments above
   fun bsw_gss_nt_user_name : KrbWrapper::Oid*
 end
