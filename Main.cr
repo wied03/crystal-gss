@@ -13,7 +13,7 @@ def handle_status(function,
   problems = [] of String
   capture_issues = ->(status_type: Int32,
                       status_desc: String,
-                      code: UInt32) {
+                      code: UInt32) do
     while 1
       major_status = KrbWrapper.gss_display_status(minor_status_for_disp_status_ptr,
                                                    code,
@@ -26,7 +26,7 @@ def handle_status(function,
       KrbWrapper.gss_release_buffer(minor_status_for_disp_status_ptr, pointerof(buffer)) if buffer.length != 0
       break if message_context == 0
     end
-  }
+  end
   capture_issues.call(1, "Major", major_status)
   capture_issues.call(2, "Minor", minor_status)
   raise "While calling #{function}, encountered the following errors: #{problems}"
