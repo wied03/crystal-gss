@@ -2,9 +2,9 @@ require "./krbwrapper"
 
 puts "Create buffer"
 buffer = KrbWrapper::Buffer.new
-spn = "HTTP/foo.com"
+spn = "mule@FOO.COM"
 buffer.value = spn
-buffer.length = spn.size
+buffer.length = spn.size + 1
 name_result = uninitialized KrbWrapper::NameStruct
 oid_ptr = BswWrapper.bsw_gss_nt_user_name
 puts "Calling func using #{oid_ptr}"
