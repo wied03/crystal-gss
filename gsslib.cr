@@ -1,5 +1,5 @@
 @[Link("heimdal-gssapi")]
-lib KrbWrapper
+lib GssLib
   struct Buffer
     length : LibC::SizeT
     value : UInt8*
@@ -60,6 +60,6 @@ end
 @[Link("bwwrapper")]
 lib BswWrapper
   # See comments above
-  fun bsw_gss_nt_user_name : KrbWrapper::Oid*
-  fun bsw_gss_krb5_mechanism : KrbWrapper::Oid*
+  fun bsw_gss_nt_user_name : GssLib::Oid*
+  fun bsw_gss_krb5_mechanism : GssLib::Oid*
 end
