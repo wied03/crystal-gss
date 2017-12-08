@@ -4,18 +4,21 @@ buffer = KrbWrapper::Buffer.new
 spn = "mule@FOO.COM"
 buffer.value = spn
 buffer.length = spn.size + 1
-name_result = uninitialized KrbWrapper::NameStruct
 minor_status = uninitialized Int32
-status = KrbWrapper.gss_import_name(pointerof(minor_status),
+minor_pointer = pointerof(minor_status)
+
+status = KrbWrapper.gss_import_name(minor_pointer,
                                     pointerof(buffer),
                                     BswWrapper.bsw_gss_nt_user_name,
-                                    pointerof(name_result))
+                                    out target_name)
+target_name_pointer = pointerof(target_name)
 
 raise "Problem!" unless status == 0
 begin
   puts "Name created"
+  # status = KrbWrapper.gss_acquire_cred_with_password(minor_pointer,
+  #                                                    name_pointer)
 ensure
-  puts "Releasing name..."
-  KrbWrapper.gss_release_name(pointerof(minor_status),
-                              pointerof(name_result))
+  KrbWrapper.gss_release_name(minor_pointer,
+                              target_name_pointer)
 end
