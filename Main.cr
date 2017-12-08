@@ -23,7 +23,10 @@ def handle_status(function,
                                                    pointerof(message_context),
                                                    buffer_pointer)
       raise "Unable to even get error status!" unless major_status == 0
-      problems << "#{status_desc} error code: #{code} - details: #{String.new(buffer.value)}"
+      # Value is a raw C string/char* pointer, need to get it into a Crystal string
+      error_message = String.new(buffer.value)
+      problems << "#{status_desc} error code: #{code} - details: #{error_message}"
+      # Our Crystal string is copied from buffer, so still need to free this
       KrbWrapper.gss_release_buffer(minor_status_for_disp_status_ptr,
                                     buffer_pointer) if buffer.length != 0
     end
