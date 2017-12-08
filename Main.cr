@@ -22,7 +22,7 @@ def handle_status(function,
     raise "Unable to even get error status!" unless major_status == 0
     problems << "While calling #{function}, #{buffer.value}"
     KrbWrapper.gss_release_buffer(minor_status_for_disp_status_ptr, pointerof(buffer)) if buffer.length != 0
-    break unless message_context
+    break if message_context == 0
   end
   raise "Errors: #{problems}"
 end
