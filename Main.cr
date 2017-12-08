@@ -23,7 +23,8 @@ def handle_status(function,
                                                    pointerof(buffer))
       raise "Unable to even get error status!" unless major_status == 0
       problems << "#{status_desc} error code: #{code} - details: #{String.new(buffer.value)}"
-      KrbWrapper.gss_release_buffer(minor_status_for_disp_status_ptr, pointerof(buffer)) if buffer.length != 0
+      KrbWrapper.gss_release_buffer(minor_status_for_disp_status_ptr,
+                                    pointerof(buffer)) if buffer.length != 0
       break if message_context == 0
     end
   end
