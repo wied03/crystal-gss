@@ -3,7 +3,7 @@ require "./krbwrapper"
 puts "Create buffer"
 buffer = KrbWrapper::Buffer.new
 spn = "HTTP/foo.com"
-buffer.buffer = spn
+buffer.value = spn
 buffer.length = spn.size
 name_result = uninitialized KrbWrapper::NameStruct
 

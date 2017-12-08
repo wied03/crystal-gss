@@ -2,7 +2,7 @@
 lib KrbWrapper
   struct Buffer
     length : LibC::SizeT
-    buffer : UInt8*
+    value : UInt8*
   end
 
   struct Oid
