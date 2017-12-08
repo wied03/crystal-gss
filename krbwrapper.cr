@@ -40,7 +40,7 @@ lib KrbWrapper
                        cred : CredentialStruct*) : Int32
 
   fun gss_acquire_cred_with_password(minor_status_ptr : Int32*,
-                                     name : NameStruct*,
+                                     name : NameStruct,
                                      password: Buffer*,
                                      time: Int32,
                                      desired_mechs: OidSet*,

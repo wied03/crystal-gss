@@ -11,9 +11,8 @@ status = KrbWrapper.gss_import_name(minor_pointer,
                                     pointerof(buffer),
                                     BswWrapper.bsw_gss_nt_user_name,
                                     out target_name)
-target_name_pointer = pointerof(target_name)
-
 raise "Problem!" unless status == 0
+target_name_pointer = pointerof(target_name)
 begin
   puts "Name created"
   pw = "thePassword"
@@ -25,7 +24,7 @@ begin
   desired_mechanisms.elements = BswWrapper.bsw_gss_krb5_mechanism
   puts "Calling gss_acquire_cred_with_password"
   status = KrbWrapper.gss_acquire_cred_with_password(minor_pointer,
-                                                     target_name_pointer,
+                                                     target_name,
                                                      pointerof(buffer),
                                                      0, # default time of 0
                                                      pointerof(desired_mechanisms),
