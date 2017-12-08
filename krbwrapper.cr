@@ -12,7 +12,7 @@ lib KrbWrapper
 
   type NameStruct = Void*
 
-  $nt_user_name_oid_desc = __gss_c_nt_user_name_oid_desc : Oid*
+  $gss_c_nt_user_name = __gss_c_nt_user_name_oid_desc : Oid*
 
   # output_name is a pointer of a pointer
   fun gss_import_name(minor_status_ptr : Int32*,

@@ -10,7 +10,7 @@ name_result = uninitialized KrbWrapper::NameStruct
 puts "Calling func"
 status = KrbWrapper.gss_import_name(out minor_status,
   pointerof(buffer),
-  KrbWrapper.nt_user_name_oid_desc,
+  KrbWrapper.gss_c_nt_user_name,
   pointerof(name_result))
 
 puts "major status is #{status} minor status is #{minor_status}!"
