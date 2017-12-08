@@ -60,7 +60,7 @@ lib GssLib
                          buffer : Buffer*) : MajorStatus
 end
 
-@[Link("bwwrapper")]
+@[Link("gss_extern_variable_fetcher")]
 lib GssExternVariableFetcher
   # See comments above
   fun gss_nt_user_name : GssLib::Oid*
