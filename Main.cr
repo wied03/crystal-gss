@@ -1,4 +1,4 @@
-require "./krbwrapper"
+require "./gsslib"
 
 # TODO: Can/should this be moved into the lib wrapper??
 def handle_status(function,

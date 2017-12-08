@@ -4,7 +4,7 @@ CFLAGS=-I. `PKG_CONFIG_PATH=$(PKG_CONFIG_PATH_HEIMDAL) pkg-config --cflags heimd
 LIBS=`PKG_CONFIG_PATH=$(PKG_CONFIG_PATH_HEIMDAL) pkg-config --libs heimdal-gssapi`
 
 # Need to be able to find libbwwrapper.dylib
-kerbclient: Main.cr krbwrapper.cr libbwwrapper.dylib
+kerbclient: Main.cr gsslib.cr libbwwrapper.dylib
 	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH_HEIMDAL) crystal build --link-flags -L$(PWD) -d Main.cr -o kerbclient
 
 libbwwrapper.dylib: wrapper.o
