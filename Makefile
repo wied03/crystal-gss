@@ -1,4 +1,3 @@
-# TODO: Do a real test inside Docker image
 CC=gcc
 # Pass in DEBUG=true as an environment variable to compile Crystal binary w/ debug info
 ifeq ($(DEBUG), true)
