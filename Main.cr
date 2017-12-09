@@ -9,6 +9,9 @@ def do_stuff
                                          GssApi::GssLib::GssCredentialUsageFlags::Initiate,
                                          GssApi::GssMechanism::KRB5)
   puts "Got credential OK!"
+  # TODO: gss_set_neg_mechs to the spnego OID
+  # gss_import_name again for the target service except this time with gss_nt_service_name as the mech
+  # then comes gss_init_sec_context
 end
 
 do_stuff()
