@@ -65,9 +65,7 @@ module GssApi
 
   class ReturnFunctionInvoker(T) < FunctionInvoker
     protected def process_result(minor_status, block_result) : T
-      # TODO: Mult assiign?
-      major_status = block_result[0]
-      return_value = block_result[1]
+      major_status, return_value = block_result
       check_result(major_status,
                    minor_status)
       return_value
