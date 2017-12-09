@@ -6,6 +6,7 @@ module GssApi
       errors = get_errors major_status, minor_status
       raise "While calling #{function}, encountered the following errors: #{errors}" if errors.any?
     end
+
     def self.get_errors(major_status,
                         minor_status)
       problems = [] of String
