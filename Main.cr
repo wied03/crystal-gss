@@ -1,24 +1,17 @@
 require "./gssapi/gssapi"
 
-def handle_status(function,
-                  major_status,
-                  minor_status)
-  GssApi::FunctionStatus.check_result(function, major_status, minor_status)
-end
-
 def get_name(upn)
   buffer = GssApi::GssLib::Buffer.new
   buffer.value = upn
   buffer.length = upn.size
-  minor_status = uninitialized UInt32
-  minor_pointer = pointerof(minor_status)
-  # TODO: Can Crystal do currying and improve how we call this stuff?
-  status = GssApi::GssLib.gss_import_name(minor_pointer,
-                                          pointerof(buffer),
-                                          GssApi::GssExternVariableFetcher.gss_nt_user_name,
-                                          out target_name)
-  handle_status("gss_import_name", status, minor_status)
-  target_name
+  invoker = GssApi::ReturnFunctionInvoker(GssApi::GssLib::NameStruct).new("gss_import_name")
+  invoker.invoke do |minor_pointer|
+    status = GssApi::GssLib.gss_import_name(minor_pointer,
+                                            pointerof(buffer),
+                                            GssApi::GssExternVariableFetcher.gss_nt_user_name,
+                                            out target_name)
+    {status, target_name}
+  end
 end
 
 def acquire_credential(password, target_name)
@@ -32,7 +25,9 @@ def acquire_credential(password, target_name)
   desired_mechanisms.count = 1
   desired_mechanisms.elements = GssApi::GssExternVariableFetcher.gss_krb5_mechanism
   puts "Calling gss_acquire_cred_with_password"
-  status = GssApi::GssLib.gss_acquire_cred_with_password(minor_pointer,
+  invoker = GssApi::ReturnFunctionInvoker(GssApi::GssLib::CredentialStruct).new("gss_acquire_cred_with_password")
+  invoker.invoke do |minor_pointer|
+      status = GssApi::GssLib.gss_acquire_cred_with_password(minor_pointer,
                                                          target_name,
                                                          pointerof(buffer),
                                                          0, # default time of 0
@@ -41,8 +36,8 @@ def acquire_credential(password, target_name)
                                                          out credential,
                                                          nil,
                                                          nil)
-  handle_status("gss_acquire_cred_with_password", status, minor_status)
-  credential
+      {status, credential}
+  end
 end
 
 def do_stuff
@@ -59,15 +54,19 @@ def do_stuff
       # TODO: Create context, get token, etc.
     ensure
       puts "Releasing credential"
-      status = GssApi::GssLib.gss_release_cred(minor_pointer,
-                                               pointerof(credential))
-      handle_status("gss_release_cred", status, minor_status)
+      invoker = GssApi::VoidFunctionInvoker.new("gss_release_cred")
+      invoker.invoke do |minor_pointer|
+        GssApi::GssLib.gss_release_cred(minor_pointer,
+                                        pointerof(credential))
+      end
     end
   ensure
     puts "Releasing name"
-    status = GssApi::GssLib.gss_release_name(minor_pointer,
-                                             target_name_pointer)
-    handle_status("gss_release_name", status, minor_status)
+    invoker = GssApi::VoidFunctionInvoker.new("gss_release_name")
+    invoker.invoke do |minor_pointer|
+      GssApi::GssLib.gss_release_name(minor_pointer,
+                                      target_name_pointer)
+    end
   end
 end
 

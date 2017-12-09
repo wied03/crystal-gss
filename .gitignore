@@ -1,3 +1,4 @@
 /kerbclient
 *.o
 *.a
+/local.krb5.conf

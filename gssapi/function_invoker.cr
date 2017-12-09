@@ -1,14 +1,26 @@
 module GssApi
-  module FunctionStatus
-    def self.check_result(function,
-                          major_status,
-                          minor_status)
-      errors = get_errors major_status, minor_status
-      raise "While calling #{function}, encountered the following errors: #{errors}" if errors.any?
+  abstract class FunctionInvoker
+    def initialize(func_name : String)
+      @func_name = func_name
     end
 
-    def self.get_errors(major_status,
-                        minor_status)
+    protected abstract def process_result(minor_status, block_result)
+
+    def invoke
+      minor_status = uninitialized UInt32
+      minor_pointer = pointerof(minor_status)
+      block_result = yield minor_pointer
+      process_result(minor_status, block_result)
+    end
+
+    protected def check_result(major_status,
+                             minor_status)
+      errors = get_errors major_status, minor_status
+      raise "While calling #{@func_name}, encountered the following errors: #{errors}" if errors.any?
+    end
+
+    private def get_errors(major_status,
+                           minor_status)
       problems = [] of String
       return problems if major_status == 0
       minor_status_for_disp_status = uninitialized UInt32

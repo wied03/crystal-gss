@@ -17,8 +17,9 @@ module GssApi
     end
 
     type NameStruct = Void*
-    alias MinorStatusPtr = UInt32*
-    alias MajorStatus = UInt32
+    alias Status = UInt32
+    alias MajorStatus = Status
+    alias StatusPtr = Status*
     type CredentialStruct = Void*
     GSS_C_BOTH = 0
     GSS_C_INITIATE = 1
@@ -29,21 +30,21 @@ module GssApi
     # $gss_c_nt_user_name = __gss_c_nt_user_name_oid_desc : Oid
 
     # output_name is a pointer of a pointer
-    fun gss_import_name(minor_status_ptr : MinorStatusPtr,
+    fun gss_import_name(minor_status_ptr : StatusPtr,
                         buffer : Buffer*,
                         oid : Oid*,
                         output_name : NameStruct*) : MajorStatus
 
-    fun gss_release_buffer(minor_status_ptr : MinorStatusPtr,
+    fun gss_release_buffer(minor_status_ptr : StatusPtr,
                            buffer : Buffer*) : MajorStatus
 
-    fun gss_release_name(minor_status_ptr : MinorStatusPtr,
+    fun gss_release_name(minor_status_ptr : StatusPtr,
                          name : NameStruct*) : MajorStatus
 
-    fun gss_release_cred(minor_status_ptr : MinorStatusPtr,
+    fun gss_release_cred(minor_status_ptr : StatusPtr,
                          cred : CredentialStruct*) : MajorStatus
 
-    fun gss_acquire_cred_with_password(minor_status_ptr : MinorStatusPtr,
+    fun gss_acquire_cred_with_password(minor_status_ptr : StatusPtr,
                                        name : NameStruct,
                                        password: Buffer*,
                                        time: Int32,
@@ -53,7 +54,7 @@ module GssApi
                                        actual_mechs: OidSet**,
                                        time_rec: Int32*) : MajorStatus
 
-    fun gss_display_status(minor_status_ptr : MinorStatusPtr,
+    fun gss_display_status(minor_status_ptr : StatusPtr,
                            status_code : UInt32,
                            status_type : Int32,
                            mechanism_type: Oid*,
