@@ -18,7 +18,7 @@ def acquire_credential(password, target_name)
                                                          pointerof(buffer),
                                                          0, # default time of 0
                                                          pointerof(desired_mechanisms),
-                                                         GssApi::GssLib::GSS_C_INITIATE,
+                                                         GssApi::GssLib::GssCredentialUsageFlags::Initiate,
                                                          out credential,
                                                          nil,
                                                          nil)
@@ -31,7 +31,7 @@ def do_stuff
                                     GssApi::GssExternVariableFetcher.gss_nt_user_name)
   begin
     puts "Name created, now getting credential"
-    #credential = acquire_credential("thePassword", target_name)
+    credential = acquire_credential("thePassword", target_name)
     puts "Got credential OK!"
   end
 end

@@ -21,10 +21,12 @@ module GssApi
     alias MajorStatus = Status
     alias StatusPtr = Status*
     type CredentialStruct = Void*
-    GSS_C_BOTH = 0
-    GSS_C_INITIATE = 1
-    GSS_C_ACCEPT = 2
-    alias GssCredentialUsageFlags = Int32
+
+    enum GssCredentialUsageFlags
+      Both # 0
+      Initiate # 1
+      Accept # 2
+    end
 
     # https://github.com/crystal-lang/crystal/issues/4845
     # $gss_c_nt_user_name = __gss_c_nt_user_name_oid_desc : Oid
