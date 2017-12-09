@@ -1,6 +1,7 @@
 require "./gssapi/gssapi"
 
 def do_stuff
+  # TODO: test without a name/password (rely on ticket cache instead)
   target_name = GssApi::GssName.new("brady@FOO.COM",
                                     GssApi::GssMechanism::NT_USER_NAME)
   puts "Name created, now getting credential"
