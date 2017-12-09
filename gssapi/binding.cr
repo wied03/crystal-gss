@@ -11,9 +11,11 @@ module GssApi
       elements : Void*
     end
 
+    type GssMechanism = GssLib::Oid*
+
     struct OidSet
       count : LibC::SizeT
-      elements : Oid*
+      elements : GssMechanism
     end
 
     type NameStruct = Void*
@@ -34,7 +36,7 @@ module GssApi
     # output_name is a pointer of a pointer
     fun gss_import_name(minor_status_ptr : StatusPtr,
                         buffer : Buffer*,
-                        oid : Oid*,
+                        oid : GssMechanism,
                         output_name : NameStruct*) : MajorStatus
 
     fun gss_release_buffer(minor_status_ptr : StatusPtr,

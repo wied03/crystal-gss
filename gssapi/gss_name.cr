@@ -4,7 +4,7 @@ module GssApi
     getter structure
 
     def initialize(upn : String,
-                   oid : GssApi::GssLib::Oid*)
+                   oid : GssApi::GssLib::GssMechanism)
       @closed = false
       buffer = GssApi::GssLib::Buffer.new
       buffer.value = upn
