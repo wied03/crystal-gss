@@ -9,13 +9,13 @@ ifeq ($(DEBUG), true)
 endif
 
 # Need to be able to find libbwwrapper.dylib
-kerbclient: Main.cr gssapi/*.cr libgss_extern_variable_fetcher.dylib
+kerbclient: Main.cr gssapi/*.cr libgss_extern_variable_fetcher.a
 	PKG_CONFIG_PATH=$(PKG_CONFIG_PATH_HEIMDAL) crystal build $(DEBUG_FLAGS) --link-flags -L$(PWD) Main.cr -o kerbclient
 
-libgss_extern_variable_fetcher.dylib: gssapi/gss_extern_variable_fetcher.o
-	gcc gssapi/gss_extern_variable_fetcher.o $(LIBS) -dynamiclib -o libgss_extern_variable_fetcher.dylib
+libgss_extern_variable_fetcher.a: gssapi/gss_extern_variable_fetcher.o
+	libtool -static gssapi/gss_extern_variable_fetcher.o -o libgss_extern_variable_fetcher.a
 
 gssapi/gss_extern_variable_fetcher.o: gssapi/gss_extern_variable_fetcher.c
 
 clean:
-	rm -rf kerbclient gssapi/*.o *.dylib
+	rm -rf kerbclient gssapi/*.o *.a
