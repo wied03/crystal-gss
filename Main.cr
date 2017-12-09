@@ -1,4 +1,5 @@
 require "./gsslib"
+require "./gss_extern_variable_fetcher"
 
 # TODO: Can/should this be moved into the lib wrapper??
 def handle_status(function,
@@ -7,8 +8,8 @@ def handle_status(function,
   return if major_status == 0
   minor_status_for_disp_status = uninitialized UInt32
   minor_status_for_disp_status_ptr = pointerof(minor_status_for_disp_status)
-  mech_oid = uninitialized GssLib::Oid
-  buffer = GssLib::Buffer.new
+  mech_oid = uninitialized GssApi::GssLib::Oid
+  buffer = GssApi::GssLib::Buffer.new
   buffer_pointer = pointerof(buffer)
   problems = [] of String
   capture_issues = ->(status_type: Int32,
@@ -16,7 +17,7 @@ def handle_status(function,
                       code: UInt32) do
     message_context = UInt32.new(-1)
     while message_context != 0
-      major_status = GssLib.gss_display_status(minor_status_for_disp_status_ptr,
+      major_status = GssApi::GssLib.gss_display_status(minor_status_for_disp_status_ptr,
                                                code,
                                                status_type,
                                                pointerof(mech_oid),
@@ -27,7 +28,7 @@ def handle_status(function,
       error_message = String.new(buffer.value)
       problems << "#{status_desc} error code: #{code} - details: #{error_message}"
       # Our Crystal string is copied from buffer, so still need to free this
-      GssLib.gss_release_buffer(minor_status_for_disp_status_ptr,
+      GssApi::GssLib.gss_release_buffer(minor_status_for_disp_status_ptr,
                                 buffer_pointer) if buffer.length != 0
     end
   end
@@ -37,37 +38,37 @@ def handle_status(function,
 end
 
 def get_name(upn)
-  buffer = GssLib::Buffer.new
+  buffer = GssApi::GssLib::Buffer.new
   buffer.value = upn
   buffer.length = upn.size
   minor_status = uninitialized UInt32
   minor_pointer = pointerof(minor_status)
   # TODO: Can Crystal do currying and improve how we call this stuff?
-  status = GssLib.gss_import_name(minor_pointer,
+  status = GssApi::GssLib.gss_import_name(minor_pointer,
                                   pointerof(buffer),
-                                  GssExternVariableFetcher.gss_nt_user_name,
+                                  GssApi::GssExternVariableFetcher.gss_nt_user_name,
                                   out target_name)
   handle_status("gss_import_name", status, minor_status)
   target_name
 end
 
 def acquire_credential(password, target_name)
-  buffer = GssLib::Buffer.new
+  buffer = GssApi::GssLib::Buffer.new
   buffer.value = password
   buffer.length = password.size
   minor_status = uninitialized UInt32
   minor_pointer = pointerof(minor_status)
 
-  desired_mechanisms = GssLib::OidSet.new
+  desired_mechanisms = GssApi::GssLib::OidSet.new
   desired_mechanisms.count = 1
-  desired_mechanisms.elements = GssExternVariableFetcher.gss_krb5_mechanism
+  desired_mechanisms.elements = GssApi::GssExternVariableFetcher.gss_krb5_mechanism
   puts "Calling gss_acquire_cred_with_password"
-  status = GssLib.gss_acquire_cred_with_password(minor_pointer,
+  status = GssApi::GssLib.gss_acquire_cred_with_password(minor_pointer,
                                                  target_name,
                                                  pointerof(buffer),
                                                  0, # default time of 0
                                                  pointerof(desired_mechanisms),
-                                                 GssLib::GSS_C_INITIATE,
+                                                 GssApi::GssLib::GSS_C_INITIATE,
                                                  out credential,
                                                  nil,
                                                  nil)
@@ -89,13 +90,13 @@ def do_stuff
       # TODO: Create context, get token, etc.
     ensure
       puts "Releasing credential"
-      status = GssLib.gss_release_cred(minor_pointer,
+      status = GssApi::GssLib.gss_release_cred(minor_pointer,
                                        pointerof(credential))
       handle_status("gss_release_cred", status, minor_status)
     end
   ensure
     puts "Releasing name"
-    status = GssLib.gss_release_name(minor_pointer,
+    status = GssApi::GssLib.gss_release_name(minor_pointer,
                                      target_name_pointer)
     handle_status("gss_release_name", status, minor_status)
   end
