@@ -1,16 +1,17 @@
 module GssApi
-  abstract class FunctionInvoker
+  class FunctionInvoker(T)
     def initialize(func_name : String)
       @func_name = func_name
     end
 
-    protected abstract def process_result(minor_status, block_result)
-
-    def invoke
+    def invoke : T
       minor_status = uninitialized UInt32
       minor_pointer = pointerof(minor_status)
       block_result = yield minor_pointer
-      process_result(minor_status, block_result)
+      major_status, return_value = block_result
+      check_result(major_status,
+                   minor_status)
+      return_value
     end
 
     protected def check_result(major_status,
@@ -54,21 +55,12 @@ module GssApi
     end
   end
 
-  class VoidFunctionInvoker < FunctionInvoker
-    protected def process_result(minor_status, block_result)
-      major_status = block_result
-      check_result(major_status,
-                   minor_status)
-      nil
-    end
-  end
-
-  class ReturnFunctionInvoker(T) < FunctionInvoker
-    protected def process_result(minor_status, block_result) : T
-      major_status, return_value = block_result
-      check_result(major_status,
-                   minor_status)
-      return_value
+  class VoidFunctionInvoker < FunctionInvoker(Void)
+    def invoke : Void
+      super do |minor_status|
+        major_status = yield minor_status
+        {major_status, nil}
+      end
     end
   end
 end
