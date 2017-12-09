@@ -2,7 +2,6 @@
 CC=gcc
 PKG_CONFIG_PATH_HEIMDAL=/usr/local/opt/heimdal/lib/pkgconfig
 CFLAGS=-I. `PKG_CONFIG_PATH=$(PKG_CONFIG_PATH_HEIMDAL) pkg-config --cflags heimdal-gssapi`
-LIBS=`PKG_CONFIG_PATH=$(PKG_CONFIG_PATH_HEIMDAL) pkg-config --libs heimdal-gssapi`
 # Pass in DEBUG=true as an environment variable to compile Crystal binary w/ debug info
 ifeq ($(DEBUG), true)
 	DEBUG_FLAGS=-d
