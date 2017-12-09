@@ -4,7 +4,7 @@ module GssApi
     getter structure
 
     def initialize(upn : String,
-                   oid : GssApi::GssLib::GssMechanism)
+                   oid : GssApi::GssMechanism)
       @closed = false
       buffer = GssApi::GssLib::Buffer.new
       buffer.value = upn
@@ -13,7 +13,7 @@ module GssApi
       @structure = invoker.invoke do |minor_pointer|
         status = GssApi::GssLib.gss_import_name(minor_pointer,
                                                 pointerof(buffer),
-                                                oid,
+                                                oid.underlying,
                                                 out target_name)
         {status, target_name}
       end
