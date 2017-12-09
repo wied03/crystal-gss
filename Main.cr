@@ -1,5 +1,4 @@
-require "./gsslib"
-require "./gss_extern_variable_fetcher"
+require "./gssapi/gssapi"
 
 # TODO: Can/should this be moved into the lib wrapper??
 def handle_status(function,
