@@ -3,8 +3,9 @@ module GssApi
   lib GssExternVariableFetcher
     alias GssMechanism = GssLib::GssMechanism
 
-    # See comments above
+    # See comments in C file
     fun gss_nt_user_name : GssMechanism
     fun gss_krb5_mechanism : GssMechanism
+    fun gss_spnego_mechanism : GssMechanism
   end
 end

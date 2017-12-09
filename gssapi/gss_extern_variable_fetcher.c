@@ -9,3 +9,7 @@ gss_OID gss_nt_user_name() {
 gss_OID gss_krb5_mechanism() {
   return GSS_KRB5_MECHANISM;
 }
+
+gss_OID gss_spnego_mechanism() {
+  return GSS_SPNEGO_MECHANISM;
+}
