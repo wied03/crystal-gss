@@ -50,15 +50,14 @@ module GssApi
     fun gss_release_cred(minor_status_ptr : StatusPtr,
                          cred : CredentialStruct*) : MajorStatus
 
-    fun gss_acquire_cred_with_password(minor_status_ptr : StatusPtr,
-                                       name : NameStruct,
-                                       password: Buffer*,
-                                       time: Int32,
-                                       desired_mechs: OidSet*,
-                                       cred_usage: GssCredentialUsageFlags,
-                                       credential_id: CredentialStruct*,
-                                       actual_mechs: OidSet**,
-                                       time_rec: Int32*) : MajorStatus
+    fun gss_acquire_cred(minor_status_ptr : StatusPtr,
+                         name : NameStruct,
+                         time: Int32,
+                         desired_mechs: OidSet*,
+                         cred_usage: GssCredentialUsageFlags,
+                         credential_id: CredentialStruct*,
+                         actual_mechs: OidSet**,
+                         time_rec: Int32*) : MajorStatus
 
     fun gss_display_status(minor_status_ptr : StatusPtr,
                            status_code : UInt32,
