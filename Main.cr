@@ -17,14 +17,15 @@ def do_stuff
   context = nil.as(GssApi::GssLib::ContextStruct)
   puts "Context currently is #{context}"
   invoker.invoke do |minor_pointer|
-    # TODO: Own class, flags, etc.
+    # TODO: Move context to its own class, handle flags, etc.
     dummy_input_buffer = uninitialized GssApi::GssLib::Buffer
     stat = GssApi::GssLib.gss_init_sec_context(minor_pointer,
                                                nil, #credential.structure,
                                                pointerof(context),
                                                target_name.structure,
                                                GssApi::GssMechanism::SPNEGO.underlying,
-                                               2 | 8 | 16 | 32, # mutual+sequence+conf+integ
+                                               # If we request mutual auth/2, we can't get names with gss_inquire_context
+                                               8 | 16 | 32, # mutual+sequence+conf+integ
                                                0, # default lifetime
                                                nil,
                                                pointerof(dummy_input_buffer),
@@ -32,7 +33,7 @@ def do_stuff
                                                pointerof(output_buffer),
                                                out actual_flags,
                                                out actual_time)
-    puts "we got time #{actual_time} flags #{actual_flags}"
+    puts "we got status #{stat} time #{actual_time} flags #{actual_flags}"
     # Not sure why we;re getting continue needed, happens even without 2
     stat = UInt32.new(0) if stat == GssApi::GssExternVariableFetcher::GSS_S_CONTINUE_NEEDED
     stat
