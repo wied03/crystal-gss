@@ -12,9 +12,9 @@ ifeq ($(UNAME_S),Linux)
 	CRYSTAL_LINK_FLAGS=-L$(PWD)/gssapi -lgc -lasn1
 endif
 ifeq ($(UNAME_S),Darwin)
-	export PKG_CONFIG_PATH=/usr/local/opt/heimdal/lib/pkgconfig
+	export PKG_CONFIG_PATH=/usr/local/opt/krb5/lib/pkgconfig
 endif
-CFLAGS=-I. `pkg-config --cflags heimdal-gssapi`
+CFLAGS=-I. `pkg-config --cflags krb5-gssapi`
 
 ifeq ($(CRYSTAL_LINK_FLAGS),)
 	$(error Unsupported OS)

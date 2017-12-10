@@ -10,10 +10,10 @@ gss_OID gss_host_based_service() {
   return GSS_C_NT_HOSTBASED_SERVICE;
 }
 
-gss_OID gss_krb5_mechanism() {
-  return GSS_KRB5_MECHANISM;
-}
+// gss_OID gss_krb5_mechanism() {
+//   return GSS_KRB5_MECHANISM;
+// }
 
-gss_OID gss_spnego_mechanism() {
-  return GSS_SPNEGO_MECHANISM;
-}
+// gss_OID gss_spnego_mechanism() {
+//   return GSS_SPNEGO_MECHANISM;
+// }

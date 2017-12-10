@@ -1,5 +1,5 @@
 module GssApi
-  @[Link("heimdal-gssapi")]
+  @[Link("krb5-gssapi")]
   lib GssLib
     struct Buffer
       length : LibC::SizeT
