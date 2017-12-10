@@ -46,6 +46,7 @@ def do_stuff
   source_name = uninitialized GssApi::GssLib::NameStruct
   established_targ_name = uninitialized GssApi::GssLib::NameStruct
   invoker.invoke do |minor_pointer|
+    # TODO: These names all need to be released/managed
     stat = GssApi::GssLib.gss_inquire_context(minor_pointer,
                                        context,
                                        pointerof(source_name),
