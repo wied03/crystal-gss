@@ -33,9 +33,11 @@ module GssApi
       capture_issues = ->(status_type: Int32,
                           status_desc: String,
                           code: UInt32) do
-        puts "got called for #{status_desc} code #{code}"
+        first_run = true
+        # this value must be zero (initially) for gss_display_status to work properly
         message_context = UInt32.new(0)
-        while problems.empty? || message_context != 0
+        while first_run || message_context != 0
+          first_run = false
           GssApi::GssLib.gss_display_status(minor_status_for_disp_status_ptr,
                                             code,
                                             status_type,
