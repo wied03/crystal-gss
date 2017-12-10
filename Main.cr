@@ -18,27 +18,27 @@ def do_stuff
 
   puts "canonical done (#{target_name}) init context"
 
-  # invoker = GssApi::VoidFunctionInvoker.new("gss_init_sec_context")
-  # output_buffer = GssApi::GssLib::Buffer.new
-  # invoker.invoke do |minor_pointer|
-  #   # TODO: Own class, flags, etc.
-  #   dummy_input_buffer = uninitialized GssApi::GssLib::Buffer
-  #   stat = GssApi::GssLib.gss_init_sec_context(minor_pointer,
-  #                                              credential.structure,
-  #                                              out context,
-  #                                              target_name.structure,
-  #                                              GssApi::GssMechanism::SPNEGO.underlying,
-  #                                              2, # mutual auth
-  #                                              0, # default lifetime
-  #                                              nil,
-  #                                              pointerof(dummy_input_buffer),
-  #                                              out actual_mechanism,
-  #                                              pointerof(output_buffer),
-  #                                              out actual_flags,
-  #                                              out actual_time)
-  #   stat
-  # end
-  # puts "token size #{output_buffer.length}"
+  invoker = GssApi::VoidFunctionInvoker.new("gss_init_sec_context")
+  output_buffer = GssApi::GssLib::Buffer.new
+  invoker.invoke do |minor_pointer|
+    # TODO: Own class, flags, etc.
+    dummy_input_buffer = uninitialized GssApi::GssLib::Buffer
+    stat = GssApi::GssLib.gss_init_sec_context(minor_pointer,
+                                               nil, #credential.structure,
+                                               out context,
+                                               target_name.structure,
+                                               GssApi::GssMechanism::SPNEGO.underlying,
+                                               2 | 8 | 16 | 32, # mutual+sequence+conf+integ
+                                               0, # default lifetime
+                                               nil,
+                                               pointerof(dummy_input_buffer),
+                                               out actual_mechanism,
+                                               pointerof(output_buffer),
+                                               out actual_flags,
+                                               out actual_time)
+    stat
+  end
+  puts "token size #{output_buffer.length}"
 end
 
 do_stuff()
