@@ -4,7 +4,7 @@ def do_stuff
   # TODO: test without a name/password (rely on ticket cache instead)
   upn_name = GssApi::GssName.new("brady@FOO.COM",
                                  GssApi::GssMechanism::NT_USER_NAME)
-  puts "Name created, now getting credential"
+  puts "Name '#{upn_name.display_name}' created, now getting credential"
   credential = GssApi::GssCredential.new(upn_name,
                                          "7jhN5KCqDZnKG3q",
                                          GssApi::GssLib::GssCredentialUsageFlags::Initiate,

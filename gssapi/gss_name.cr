@@ -27,7 +27,7 @@ module GssApi
 
     def canonicalize(mechanism : GssApi::GssMechanism)
         invoker = GssApi::FunctionInvoker(GssApi::GssLib::NameStruct).new("gss_canonicalize_name")
-        structure = invoker.invoke do |minor_pointer|
+        new_structure = invoker.invoke do |minor_pointer|
           stat = GssApi::GssLib.gss_canonicalize_name(minor_pointer,
                                                       @structure,
                                                       mechanism.underlying,
@@ -36,7 +36,7 @@ module GssApi
         end
         # We already have a structure so don't want to use the typical initializer
         instance = GssName.allocate
-        instance.copy(structure)
+        instance.copy(new_structure)
         instance
     end
 
