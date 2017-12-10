@@ -1,10 +1,12 @@
 require "./gssapi/gssapi"
 
 def do_stuff
+  puts "krb5 item is #{GssApi::GssMechanism::KRB5}"
+
   # TODO: test without a name/password (rely on ticket cache instead)
   upn_name = GssApi::GssName.new("brady@FOO.COM",
                                  GssApi::GssMechanism::NT_USER_NAME)
-  puts "Name '#{upn_name.display_name}' created, now getting credential"
+  puts "Name #{upn_name} created, now getting credential"
   credential = GssApi::GssCredential.new(upn_name,
                                          "7jhN5KCqDZnKG3q",
                                          GssApi::GssLib::GssCredentialUsageFlags::Initiate,
@@ -15,7 +17,7 @@ def do_stuff
 
   target_name = target_name.canonicalize(GssApi::GssMechanism::SPNEGO)
 
-  puts "canonical done (#{target_name.display_name}) init context"
+  puts "canonical done (#{target_name}) init context"
 
   invoker = GssApi::VoidFunctionInvoker.new("gss_init_sec_context")
   output_buffer = GssApi::GssLib::Buffer.new

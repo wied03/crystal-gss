@@ -40,7 +40,7 @@ module GssApi
         instance
     end
 
-    def display_name
+    def to_s(io)
       invoker = GssApi::FunctionInvoker(GssApi::GssLib::GssMechanism).new("gss_display_name")
       buffer = GssApi::GssLib::Buffer.new
       buffer_pointer = pointerof(buffer)
@@ -56,7 +56,7 @@ module GssApi
       # String creates a copy, so need to free this
       GssApi::GssLib.gss_release_buffer(pointerof(minor),
                                         buffer_pointer)
-      message
+      io << "<GssName: '#{message}'>"
     end
 
     def finalize

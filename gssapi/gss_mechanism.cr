@@ -10,5 +10,12 @@ module GssApi
     protected def initialize(underlying : GssApi::GssLib::GssMechanism)
       @underlying = underlying
     end
+
+    def to_s(io)
+        structure = @underlying.value
+        # We want to keep the general structure opaque but it's actually octets underneath
+        slice = structure.elements.as(Pointer(UInt8)).to_slice(structure.length)
+        io << "<GssMechanism #{slice}>"
+    end
   end
 end
