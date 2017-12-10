@@ -5,16 +5,15 @@ module GssApi
 
     def initialize(name : GssName,
                    password : String,
-                   usage_flags : GssApi::GssLib::GssCredentialUsageFlags,
-                   desired_mechanism : GssApi::GssMechanism)
+                   usage_flags : GssApi::GssLib::GssCredentialUsageFlags)
       @closed = false
       buffer = GssApi::GssLib::Buffer.new
       buffer.value = password
       buffer.length = password.size
 
       desired_mechs = GssApi::GssLib::OidSet.new
-      desired_mechs.count = 1
-      desired_mechs.elements = desired_mechanism.underlying
+      desired_mechs.count = 0
+      desired_mechs.elements = nil
       invoker = GssApi::FunctionInvoker(GssApi::GssLib::CredentialStruct).new("gss_acquire_cred_with_password")
       @structure = invoker.invoke do |minor_pointer|
         status = GssApi::GssLib.gss_acquire_cred_with_password(minor_pointer,

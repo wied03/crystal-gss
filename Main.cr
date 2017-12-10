@@ -9,13 +9,12 @@ def do_stuff
   puts "Name #{upn_name} created, now getting credential"
   # credential = GssApi::GssCredential.new(upn_name,
   #                                        "7jhN5KCqDZnKG3q",
-  #                                        GssApi::GssLib::GssCredentialUsageFlags::Initiate,
-  #                                        GssApi::GssMechanism::KRB5)
-  # puts "Got credential OK!"
+  #                                        GssApi::GssLib::GssCredentialUsageFlags::Initiate)
+  #puts "Got credential OK!"
   target_name = GssApi::GssName.new("ldap@kdc.foo.com",
                                     GssApi::GssMechanism::NT_HOST_BASED_SERVICE)
 
-  #target_name = target_name.canonicalize(GssApi::GssMechanism::SPNEGO)
+  target_name = target_name.canonicalize(GssApi::GssMechanism::SPNEGO)
 
   puts "canonical done (#{target_name}) init context"
 

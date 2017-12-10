@@ -29,20 +29,27 @@ module GssApi
       mech_oid = uninitialized GssApi::GssLib::GssMechanism
       buffer = GssApi::GssLib::Buffer.new
       buffer_pointer = pointerof(buffer)
+      status_failure = false
       capture_issues = ->(status_type: Int32,
                           status_desc: String,
                           code: UInt32) do
         message_context = UInt32.new(-1)
         while message_context != 0
-          major_status = GssApi::GssLib.gss_display_status(minor_status_for_disp_status_ptr,
-                                                           code,
-                                                           status_type,
-                                                           mech_oid,
-                                                           pointerof(message_context),
-                                                           buffer_pointer)
-          raise "Unable to even get error status!" unless major_status == 0
+          GssApi::GssLib.gss_display_status(minor_status_for_disp_status_ptr,
+                                            code,
+                                            status_type,
+                                            mech_oid,
+                                            pointerof(message_context),
+                                            buffer_pointer)
           # Value is a raw C string/char* pointer, need to get it into a Crystal string
           error_message = String.new(buffer.value)
+          # This is how this shows up
+          if message_context == UInt32::MAX
+            puts "Unable to even get message status: #{error_message}"
+            problems << "Unable to even get message status: #{error_message}"
+            status_failure = true
+            break
+          end
           problems << "#{status_desc} error code: #{code} - details: #{error_message}"
           # Our Crystal string is copied from buffer, so still need to free this
           GssApi::GssLib.gss_release_buffer(minor_status_for_disp_status_ptr,
@@ -50,7 +57,7 @@ module GssApi
         end
       end
       capture_issues.call(1, "Major", major_status)
-      capture_issues.call(2, "Minor", minor_status)
+      capture_issues.call(2, "Minor", minor_status) unless status_failure
       problems
     end
   end
