@@ -23,6 +23,8 @@ module GssApi
     alias MajorStatus = Status
     alias StatusPtr = Status*
     type CredentialStruct = Void*
+    type ContextStruct = Void*
+    type ChannelBindingsStruct = Void*
 
     enum GssCredentialUsageFlags
       Both # 0
@@ -64,5 +66,42 @@ module GssApi
                            mechanism_type: Oid*,
                            message_context: UInt32*,
                            buffer : Buffer*) : MajorStatus
+
+# TODO: Flags
+#define GSS_C_DELEG_FLAG        1
+#define GSS_C_MUTUAL_FLAG       2
+#define GSS_C_REPLAY_FLAG       4
+#define GSS_C_SEQUENCE_FLAG     8
+#define GSS_C_CONF_FLAG         16
+#define GSS_C_INTEG_FLAG        32
+#define GSS_C_ANON_FLAG         64
+#define GSS_C_PROT_READY_FLAG   128
+#define GSS_C_TRANS_FLAG        256
+#define GSS_C_DELEG_POLICY_FLAG 32768
+#define GSS_C_NO_UI_FLAG  0x80000000
+
+    fun gss_init_sec_context(minor_status_ptr : StatusPtr,
+                             credential       : CredentialStruct,
+                             context          : ContextStruct*,
+                             target_name      : NameStruct,
+                             mechanism        : GssMechanism,
+                             flags            : UInt32,
+                             time             : UInt32,
+                             channel_bindings : ChannelBindingsStruct,
+                             input_token      : Buffer*,
+                             actual_mechanism : GssMechanism*,
+                             output_token     : Buffer*,
+                             actual_flags     : UInt32*,
+                             time_valid_for   : UInt32*) : MajorStatus
+
+    fun gss_canonicalize_name(minor_status_ptr : StatusPtr,
+                              target_name      : NameStruct,
+                              mechanism        : GssMechanism,
+                              output_name      : NameStruct*) : MajorStatus
+
+    fun gss_display_name(minor_status_ptr : StatusPtr,
+                         input_name       : NameStruct,
+                         output_buffer    : Buffer*,
+                         output_type      : GssMechanism*) : MajorStatus
   end
 end

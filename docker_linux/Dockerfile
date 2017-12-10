@@ -14,3 +14,5 @@ RUN apt-get update \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y heimdal-clients heimdal-dev make gcc pkg-config crystal \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY kdc.sh /usr/local/bin/

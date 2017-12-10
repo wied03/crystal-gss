@@ -1,6 +1,7 @@
 module GssApi
   class GssCredential
     @structure : GssApi::GssLib::CredentialStruct
+    getter structure
 
     def initialize(name : GssName,
                    password : String,
