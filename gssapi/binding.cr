@@ -1,5 +1,5 @@
 module GssApi
-  @[Link("heimdal-gssapi")]
+  @[Link("krb5-gssapi")]
   lib GssLib
     struct Buffer
       length : LibC::SizeT
@@ -50,20 +50,19 @@ module GssApi
     fun gss_release_cred(minor_status_ptr : StatusPtr,
                          cred : CredentialStruct*) : MajorStatus
 
-    fun gss_acquire_cred_with_password(minor_status_ptr : StatusPtr,
-                                       name : NameStruct,
-                                       password: Buffer*,
-                                       time: Int32,
-                                       desired_mechs: OidSet*,
-                                       cred_usage: GssCredentialUsageFlags,
-                                       credential_id: CredentialStruct*,
-                                       actual_mechs: OidSet**,
-                                       time_rec: Int32*) : MajorStatus
+    fun gss_acquire_cred(minor_status_ptr : StatusPtr,
+                         name : NameStruct,
+                         time: Int32,
+                         desired_mechs: OidSet*,
+                         cred_usage: GssCredentialUsageFlags,
+                         credential_id: CredentialStruct*,
+                         actual_mechs: OidSet**,
+                         time_rec: Int32*) : MajorStatus
 
     fun gss_display_status(minor_status_ptr : StatusPtr,
                            status_code : UInt32,
                            status_type : Int32,
-                           mechanism_type: Oid*,
+                           mechanism_type: GssMechanism,
                            message_context: UInt32*,
                            buffer : Buffer*) : MajorStatus
 
@@ -93,6 +92,16 @@ module GssApi
                              output_token     : Buffer*,
                              actual_flags     : UInt32*,
                              time_valid_for   : UInt32*) : MajorStatus
+
+    fun gss_inquire_context(minor_status_ptr : StatusPtr,
+                            context          : ContextStruct,
+                            source_name      : NameStruct*,
+                            target_name      : NameStruct*,
+                            ticket_lifetime  : UInt32*,
+                            mechanism        : GssMechanism*,
+                            flags            : UInt32*,
+                            locally_init     : Int32*,
+                            open             : Int32*) : MajorStatus
 
     fun gss_canonicalize_name(minor_status_ptr : StatusPtr,
                               target_name      : NameStruct,

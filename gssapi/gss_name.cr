@@ -19,8 +19,9 @@ module GssApi
       end
     end
 
+    # TODO: Change back to protected??
     # Protected so we can create copies (private doesn't work)
-    protected def copy(structure)
+    def copy(structure)
       @closed = false
       @structure = structure
     end

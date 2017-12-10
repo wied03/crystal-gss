@@ -11,7 +11,7 @@ RUN apt-get update \
 
 # Allows us to get new versions of Crystal w/o executing earlier step
 RUN apt-get update \
-  && DEBIAN_FRONTEND=noninteractive apt-get install -y heimdal-clients heimdal-dev make gcc pkg-config crystal \
+  && DEBIAN_FRONTEND=noninteractive apt-get install -y krb5-user libkrb5-dev libkrb5-dbg make gcc gdb pkg-config crystal \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

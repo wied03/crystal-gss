@@ -4,29 +4,22 @@ module GssApi
     getter structure
 
     def initialize(name : GssName,
-                   password : String,
-                   usage_flags : GssApi::GssLib::GssCredentialUsageFlags,
-                   desired_mechanism : GssApi::GssMechanism)
+                   usage_flags : GssApi::GssLib::GssCredentialUsageFlags)
       @closed = false
-      buffer = GssApi::GssLib::Buffer.new
-      buffer.value = password
-      buffer.length = password.size
 
       desired_mechs = GssApi::GssLib::OidSet.new
-      desired_mechs.count = 1
-      desired_mechs.elements = desired_mechanism.underlying
-      puts "Calling gss_acquire_cred_with_password"
-      invoker = GssApi::FunctionInvoker(GssApi::GssLib::CredentialStruct).new("gss_acquire_cred_with_password")
+      desired_mechs.count = 0
+      desired_mechs.elements = nil
+      invoker = GssApi::FunctionInvoker(GssApi::GssLib::CredentialStruct).new("gss_acquire_cred")
       @structure = invoker.invoke do |minor_pointer|
-        status = GssApi::GssLib.gss_acquire_cred_with_password(minor_pointer,
-                                                               name.structure,
-                                                               pointerof(buffer),
-                                                               0, # default time of 0
-                                                               pointerof(desired_mechs),
-                                                               usage_flags,
-                                                               out credential,
-                                                               nil,
-                                                               nil)
+        status = GssApi::GssLib.gss_acquire_cred(minor_pointer,
+                                                 name.structure,
+                                                 0, # default time of 0
+                                                 pointerof(desired_mechs),
+                                                 usage_flags,
+                                                 out credential,
+                                                 nil,
+                                                 nil)
         {status, credential}
       end
     end
