@@ -1,3 +1,7 @@
+# TODO: Use a src style shard layout
+# TODO: Tests
+# TODO: Figure out how to make this a "binary library" or at least supply the necessary build flags when used in an app
+
 CC=gcc
 # Pass in DEBUG=true as an environment variable to compile Crystal binary w/ debug info
 ifeq ($(DEBUG), true)
