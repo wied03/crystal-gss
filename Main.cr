@@ -42,6 +42,8 @@ def do_stuff
     stat
   end
   puts "token size #{output_buffer.length}"
+  slice = output_buffer.value.to_slice(output_buffer.length)
+  puts "token is #{slice.hexdump}"
 end
 
 do_stuff()
