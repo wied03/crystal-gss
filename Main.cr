@@ -37,6 +37,8 @@ def do_stuff
                                                pointerof(output_buffer),
                                                out actual_flags,
                                                out actual_time)
+    # Not sure why we;re getting continue needed, happens even without 2
+    stat = UInt32.new(0) if stat == GssApi::GssExternVariableFetcher::GSS_S_CONTINUE_NEEDED
     stat
   end
   puts "token size #{output_buffer.length}"

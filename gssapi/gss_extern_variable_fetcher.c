@@ -15,3 +15,7 @@ gss_OID gss_host_based_service() {
 gss_OID gss_spnego_mechanism() {
   return &gss_spnego_mechanism_oid_desc;
 }
+
+OM_uint32 gss_s_continue_needed() {
+  return GSS_S_CONTINUE_NEEDED;
+}
