@@ -2,15 +2,9 @@ require "./gssapi/gssapi"
 
 def do_stuff
   #puts "spnego item is #{GssApi::GssMechanism::SPNEGO}"
-
-  # TODO: test without a name/password (rely on ticket cache instead)
   upn_name = GssApi::GssName.new("brady@FOO.COM",
                                  GssApi::GssMechanism::NT_USER_NAME)
-  puts "Name #{upn_name} created, now getting credential"
-  # credential = GssApi::GssCredential.new(upn_name,
-  #                                        "7jhN5KCqDZnKG3q",
-  #                                        GssApi::GssLib::GssCredentialUsageFlags::Initiate)
-  #puts "Got credential OK!"
+  puts "Name #{upn_name} created"
   target_name = GssApi::GssName.new("ldap@kdc.foo.com",
                                     GssApi::GssMechanism::NT_HOST_BASED_SERVICE)
 
