@@ -15,7 +15,6 @@ module GssApi
       desired_mechs = GssApi::GssLib::OidSet.new
       desired_mechs.count = 1
       desired_mechs.elements = desired_mechanism.underlying
-      puts "Calling gss_acquire_cred_with_password"
       invoker = GssApi::FunctionInvoker(GssApi::GssLib::CredentialStruct).new("gss_acquire_cred_with_password")
       @structure = invoker.invoke do |minor_pointer|
         status = GssApi::GssLib.gss_acquire_cred_with_password(minor_pointer,
