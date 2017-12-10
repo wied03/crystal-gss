@@ -26,15 +26,16 @@ module GssApi
       return problems if major_status == 0
       minor_status_for_disp_status = uninitialized UInt32
       minor_status_for_disp_status_ptr = pointerof(minor_status_for_disp_status)
-      mech_oid = uninitialized GssApi::GssLib::GssMechanism
+      mech_oid = nil.as(GssApi::GssLib::GssMechanism)
       buffer = GssApi::GssLib::Buffer.new
       buffer_pointer = pointerof(buffer)
       status_failure = false
       capture_issues = ->(status_type: Int32,
                           status_desc: String,
                           code: UInt32) do
-        message_context = UInt32.new(-1)
-        while message_context != 0
+        puts "got called for #{status_desc} code #{code}"
+        message_context = UInt32.new(0)
+        while problems.empty? || message_context != 0
           GssApi::GssLib.gss_display_status(minor_status_for_disp_status_ptr,
                                             code,
                                             status_type,
@@ -45,8 +46,7 @@ module GssApi
           error_message = String.new(buffer.value)
           # This is how this shows up
           if message_context == UInt32::MAX
-            puts "Unable to even get message status: #{error_message}"
-            problems << "Unable to even get message status: #{error_message}"
+            problems << "Unable to even get #{status_desc} message status: #{error_message}"
             status_failure = true
             break
           end
