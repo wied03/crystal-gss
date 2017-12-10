@@ -63,7 +63,7 @@ module GssApi
     fun gss_display_status(minor_status_ptr : StatusPtr,
                            status_code : UInt32,
                            status_type : Int32,
-                           mechanism_type: Oid*,
+                           mechanism_type: GssMechanism,
                            message_context: UInt32*,
                            buffer : Buffer*) : MajorStatus
 

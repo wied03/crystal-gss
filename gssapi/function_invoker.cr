@@ -26,7 +26,7 @@ module GssApi
       return problems if major_status == 0
       minor_status_for_disp_status = uninitialized UInt32
       minor_status_for_disp_status_ptr = pointerof(minor_status_for_disp_status)
-      mech_oid = uninitialized GssApi::GssLib::Oid
+      mech_oid = uninitialized GssApi::GssLib::GssMechanism
       buffer = GssApi::GssLib::Buffer.new
       buffer_pointer = pointerof(buffer)
       capture_issues = ->(status_type: Int32,
@@ -37,7 +37,7 @@ module GssApi
           major_status = GssApi::GssLib.gss_display_status(minor_status_for_disp_status_ptr,
                                                            code,
                                                            status_type,
-                                                           pointerof(mech_oid),
+                                                           mech_oid,
                                                            pointerof(message_context),
                                                            buffer_pointer)
           raise "Unable to even get error status!" unless major_status == 0
