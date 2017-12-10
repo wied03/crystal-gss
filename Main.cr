@@ -1,7 +1,7 @@
 require "./gssapi/gssapi"
 
 def do_stuff
-  puts "krb5 item is #{GssApi::GssMechanism::KRB5}"
+  puts "spnego item is #{GssApi::GssMechanism::SPNEGO}"
 
   # TODO: test without a name/password (rely on ticket cache instead)
   upn_name = GssApi::GssName.new("brady@FOO.COM",
