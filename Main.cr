@@ -22,10 +22,11 @@ def do_stuff
   output_buffer = GssApi::GssLib::Buffer.new
   invoker.invoke do |minor_pointer|
     # TODO: Own class, flags, etc.
+    no_context = nil.as(GssApi::GssLib::ContextStruct)
     dummy_input_buffer = uninitialized GssApi::GssLib::Buffer
     stat = GssApi::GssLib.gss_init_sec_context(minor_pointer,
                                                nil, #credential.structure,
-                                               out context,
+                                               pointerof(no_context),
                                                target_name.structure,
                                                GssApi::GssMechanism::SPNEGO.underlying,
                                                2 | 8 | 16 | 32, # mutual+sequence+conf+integ
