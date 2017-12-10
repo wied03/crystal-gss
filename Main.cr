@@ -43,12 +43,13 @@ def do_stuff
   puts "token is #{slice.hexdump}"
   # TODO: gss_delete_sec_context
   invoker = GssApi::VoidFunctionInvoker.new("gss_inquire_context")
-  the_name = uninitialized GssApi::GssLib::NameStruct
+  source_name = uninitialized GssApi::GssLib::NameStruct
+  established_targ_name = uninitialized GssApi::GssLib::NameStruct
   invoker.invoke do |minor_pointer|
     stat = GssApi::GssLib.gss_inquire_context(minor_pointer,
                                        context,
-                                       out source_name,
-                                       pointerof(the_name),#out target_name2,
+                                       pointerof(source_name),
+                                       pointerof(established_targ_name),
                                        out lifetime,
                                        out mechanism,
                                        out flags,
@@ -57,10 +58,14 @@ def do_stuff
     puts "inquire stat #{stat} open #{open} local_init #{local_init}"
     stat
   end
-  puts "the name is #{the_name}"
+  puts "the name is #{established_targ_name}"
   instance = GssApi::GssName.allocate
-  instance.copy(the_name)
-  puts "name is #{instance}"
+  instance.copy(established_targ_name)
+  puts "established_targ_name is #{instance}"
+  puts "source_name name is #{source_name}"
+  instance = GssApi::GssName.allocate
+  instance.copy(source_name)
+  puts "source_name is #{instance}"
 end
 
 do_stuff()
