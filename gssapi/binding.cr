@@ -93,6 +93,16 @@ module GssApi
                              actual_flags     : UInt32*,
                              time_valid_for   : UInt32*) : MajorStatus
 
+    fun gss_inquire_context(minor_status_ptr : StatusPtr,
+                            context          : ContextStruct,
+                            source_name      : NameStruct*,
+                            target_name      : NameStruct*,
+                            ticket_lifetime  : UInt32*,
+                            mechanism        : GssMechanism*,
+                            flags            : UInt32*,
+                            locally_init     : Int32*,
+                            open             : Int32*) : MajorStatus
+
     fun gss_canonicalize_name(minor_status_ptr : StatusPtr,
                               target_name      : NameStruct,
                               mechanism        : GssMechanism,

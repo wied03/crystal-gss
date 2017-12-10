@@ -14,13 +14,14 @@ def do_stuff
 
   invoker = GssApi::VoidFunctionInvoker.new("gss_init_sec_context")
   output_buffer = GssApi::GssLib::Buffer.new
+  context = nil.as(GssApi::GssLib::ContextStruct)
+  puts "Context currently is #{context}"
   invoker.invoke do |minor_pointer|
     # TODO: Own class, flags, etc.
-    no_context = nil.as(GssApi::GssLib::ContextStruct)
     dummy_input_buffer = uninitialized GssApi::GssLib::Buffer
     stat = GssApi::GssLib.gss_init_sec_context(minor_pointer,
                                                nil, #credential.structure,
-                                               pointerof(no_context),
+                                               pointerof(context),
                                                target_name.structure,
                                                GssApi::GssMechanism::SPNEGO.underlying,
                                                2 | 8 | 16 | 32, # mutual+sequence+conf+integ
@@ -31,13 +32,35 @@ def do_stuff
                                                pointerof(output_buffer),
                                                out actual_flags,
                                                out actual_time)
+    puts "we got time #{actual_time} flags #{actual_flags}"
     # Not sure why we;re getting continue needed, happens even without 2
     stat = UInt32.new(0) if stat == GssApi::GssExternVariableFetcher::GSS_S_CONTINUE_NEEDED
     stat
   end
+  puts "Context now is #{context}"
   puts "token size #{output_buffer.length}"
   slice = output_buffer.value.to_slice(output_buffer.length)
   puts "token is #{slice.hexdump}"
+  # TODO: gss_delete_sec_context
+  invoker = GssApi::VoidFunctionInvoker.new("gss_inquire_context")
+  the_name = uninitialized GssApi::GssLib::NameStruct
+  invoker.invoke do |minor_pointer|
+    stat = GssApi::GssLib.gss_inquire_context(minor_pointer,
+                                       context,
+                                       out source_name,
+                                       pointerof(the_name),#out target_name2,
+                                       out lifetime,
+                                       out mechanism,
+                                       out flags,
+                                       out local_init,
+                                       out open)
+    puts "inquire stat #{stat} open #{open} local_init #{local_init}"
+    stat
+  end
+  puts "the name is #{the_name}"
+  instance = GssApi::GssName.allocate
+  instance.copy(the_name)
+  puts "name is #{instance}"
 end
 
 do_stuff()
