@@ -1,7 +1,7 @@
 module GssApi
   class GssMechanism
-    NT_USER_NAME = GssMechanism.new(GssApi::GssExternVariableFetcher.gss_nt_user_name)
-    NT_HOST_BASED_SERVICE = GssMechanism.new(GssApi::GssExternVariableFetcher.gss_host_based_service)
+    NT_USER_NAME = GssMechanism.new(GssApi::GssLib.gss_nt_user_name)
+    NT_HOST_BASED_SERVICE = GssMechanism.new(GssApi::GssLib.gss_host_based_service)
     SPNEGO = GssMechanism.new(GssApi::GssExternVariableFetcher.gss_spnego_mechanism)
 
     getter underlying

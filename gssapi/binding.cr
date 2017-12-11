@@ -32,8 +32,8 @@ module GssApi
       Accept # 2
     end
 
-    # https://github.com/crystal-lang/crystal/issues/4845
-    # $gss_c_nt_user_name = __gss_c_nt_user_name_oid_desc : Oid
+    $gss_nt_user_name       = GSS_C_NT_USER_NAME         : GssMechanism
+    $gss_host_based_service = GSS_C_NT_HOSTBASED_SERVICE : GssMechanism
 
     # output_name is a pointer of a pointer
     fun gss_import_name(minor_status_ptr : StatusPtr,
