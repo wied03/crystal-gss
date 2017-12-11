@@ -36,7 +36,9 @@ def do_stuff
                                                out actual_time)
     puts "we got status #{stat} time #{actual_time} flags #{actual_flags}"
     # Not sure why we;re getting continue needed, happens even without 2
-    stat = UInt32.new(0) if stat == GssApi::GssExternVariableFetcher::GSS_S_CONTINUE_NEEDED
+    # GSS_S_CONTINUE_NEEDED is actually what 1 is, need to do a bitwise and
+    # https://tools.ietf.org/html/rfc2744.html talks about how this works
+    stat = UInt32.new(0) if stat == 1
     stat
   end
   puts "Context now is #{context}"

@@ -7,7 +7,3 @@ static gss_OID_desc gss_spnego_mechanism_oid_desc = {6, (void *)"\x2b\x06\x01\x0
 gss_OID gss_spnego_mechanism() {
   return &gss_spnego_mechanism_oid_desc;
 }
-
-OM_uint32 gss_s_continue_needed() {
-  return GSS_S_CONTINUE_NEEDED;
-}
