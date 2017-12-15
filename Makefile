@@ -20,10 +20,6 @@ ifeq ($(UNAME_S),Darwin)
 endif
 CFLAGS=-I. `pkg-config --cflags krb5-gssapi`
 
-ifeq ($(CRYSTAL_LINK_FLAGS),)
-	$(error Unsupported OS)
-endif
-
 kerbclient: Main.cr gssapi/*.cr gssapi/libgss_extern_variable_fetcher.a
 	crystal build $(DEBUG_FLAGS) --link-flags "$(CRYSTAL_LINK_FLAGS)" Main.cr -o kerbclient
 
