@@ -71,6 +71,9 @@ kill $SAMBA_PID
 echo "Dumping Endpoint Keytab..."
 ktutil -k /kerberos_share/endpoint.keytab list
 
+echo "Adding user 'brady' (aka the end user) to Active Directory..."
+/usr/bin/samba-tool user create brady $BRADY_PASSWORD
+
 # Used as a signal
 touch /kerberos_share/samba_ready
 

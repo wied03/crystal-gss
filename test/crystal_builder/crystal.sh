@@ -14,6 +14,23 @@ echo -e "\ndomain foo.com" >> /etc/resolv.conf
 echo "Dumping resolv.conf"
 cat /etc/resolv.conf
 
+while [ ! -f "/kerberos_share/samba_ready" ]
+do
+    echo "Waiting for Samba container to signal its ready"
+    sleep 2
+done;
+
+while ! nc -z kdc 139
+do
+    echo "Waiting for Samba KDC to come up on port 139..."
+    sleep 2
+done;
+
+echo "Samba is up! Calling crystal..."
+
+echo "Getting Kerberos ticket via kinit"
+echo -e "$BRADY_PASSWORD\n" | kinit brady@FOO.COM
+
 cd /source
 make clean
 make

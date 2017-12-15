@@ -8,13 +8,16 @@ services:
       - kerberos_keytabs:/kerberos_share
     environment:
       DOMAIN_ADMIN_PASSWORD: yKQ4gqmVtobDh8N
+      BRADY_PASSWORD: 7jhN5KCqDZnKG3q
     hostname: kdc
     domainname: foo.com
   crystal-client:
     build: crystal_builder
-    command: kdc.sh
+    command: crystal.sh
     depends_on:
       - kdc
+    environment:
+      BRADY_PASSWORD: 7jhN5KCqDZnKG3q
     volumes:
       - kerberos_keytabs:/kerberos_share:ro
       - ..:/source
