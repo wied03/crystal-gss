@@ -13,3 +13,8 @@ echo -e "\ndomain foo.com" >> /etc/resolv.conf
 
 echo "Dumping resolv.conf"
 cat /etc/resolv.conf
+
+cd /source
+make clean
+make
+./kerbclient

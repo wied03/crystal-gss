@@ -1,0 +1,24 @@
+version: '3'
+services:
+  kdc:
+    build: kdc
+    # Samba/AD domain provision won't run without this
+    privileged: true
+    volumes:
+      - kerberos_keytabs:/kerberos_share
+    environment:
+      DOMAIN_ADMIN_PASSWORD: yKQ4gqmVtobDh8N
+    hostname: kdc
+    domainname: foo.com
+  crystal-client:
+    build: crystal_builder
+    command: kdc.sh
+    depends_on:
+      - kdc
+    volumes:
+      - kerberos_keytabs:/kerberos_share:ro
+      - ..:/source
+    hostname: crystal
+    domainname: foo.com
+volumes:
+  kerberos_keytabs:
