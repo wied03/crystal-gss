@@ -2,8 +2,11 @@ module GssApi
   # On Linux, Crystal's GC lib tries to find the com_err lib but probably due to no indirect linking, it doesn't
   # find a symbol, which is present in com_err
   # If we add com_err (dependent) after gc (requester), then it finds it
-
-  @[Link(ldflags: "-lgc -lcom_err `pkg-config krb5-gssapi --libs`")]
+  {% if flag?(:linux) %}
+    @[Link(ldflags: "-lgc -lcom_err `pkg-config krb5-gssapi --libs`")]
+  {% else %}
+    @[Link("krb5-gssapi")]
+  {% end %}
   lib GssLib
     # MIT KRB5 GSS on Mac packs Structs, LLVM flags for Mac are x86_64-apple-darwin17.0.0
     {% if flag?(:apple) %}
