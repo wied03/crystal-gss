@@ -5,7 +5,7 @@ module GssApi
 
   @[Link(ldflags: "-lgc -lcom_err `pkg-config krb5-gssapi --libs`")]
   lib GssLib
-    # MIT KRB5 GSS on Mac packs Structs
+    # MIT KRB5 GSS on Mac packs Structs, LLVM flags for Mac are x86_64-apple-darwin17.0.0
     {% if flag?(:apple) %}
     @[Packed]
     {% end %}
