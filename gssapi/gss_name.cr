@@ -9,15 +9,8 @@ module GssApi
       buffer = GssApi::GssLib::Buffer.new
       buffer.value = principal
       buffer.length = principal.size
-      # TODO: Make this a module and combine function name with invokd method, better yet, use a macro
-      invoker = GssApi::FunctionInvoker(GssApi::GssLib::NameStruct).new("gss_import_name")
-      @structure = invoker.invoke do |minor_pointer|
-        status = GssApi::GssLib.gss_import_name(minor_pointer,
-                                                pointerof(buffer),
-                                                oid.underlying,
-                                                out target_name)
-        {status, target_name}
-      end
+      @structure = GssApi::Functions.gss_import_name(pointerof(buffer),
+                                                     oid.underlying)
     end
 
     # TODO: Change back to protected??
