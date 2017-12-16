@@ -1,7 +1,6 @@
 require "./gssapi/gssapi"
 
 def do_stuff
-  # TODO: This works on Linux but crashes the Mac
   #puts "spnego item is #{GssApi::GssMechanism::SPNEGO}"
   upn_name = GssApi::GssName.new("brady@FOO.COM",
                                  GssApi::GssMechanism::NT_USER_NAME)
