@@ -21,6 +21,16 @@ module GssApi
     gss_return_function gss_import_name,
                         GssApi::GssLib::NameStruct,
                         buffer,
-                        oid
+                        mechanism
+
+    gss_return_function gss_canonicalize_name,
+                        GssApi::GssLib::NameStruct,
+                        name_structure,
+                        mechanism
+
+    gss_return_function gss_display_name,
+                        GssApi::GssLib::GssMechanism,
+                        input_name,
+                        output_buffer
   end
 end

@@ -21,31 +21,19 @@ module GssApi
     end
 
     def canonicalize(mechanism : GssApi::GssMechanism)
-        invoker = GssApi::FunctionInvoker(GssApi::GssLib::NameStruct).new("gss_canonicalize_name")
-        new_structure = invoker.invoke do |minor_pointer|
-          stat = GssApi::GssLib.gss_canonicalize_name(minor_pointer,
-                                                      @structure,
-                                                      mechanism.underlying,
-                                                      out canon_name)
-          {stat, canon_name}
-        end
-        # We already have a structure so don't want to use the typical initializer
-        instance = GssName.allocate
-        instance.copy(new_structure)
-        instance
+      new_structure = GssApi::Functions.gss_canonicalize_name(@structure,
+                                                              mechanism.underlying)
+      # We already have a structure so don't want to use the typical initializer
+      instance = GssName.allocate
+      instance.copy(new_structure)
+      instance
     end
 
     def to_s(io)
-      invoker = GssApi::FunctionInvoker(GssApi::GssLib::GssMechanism).new("gss_display_name")
       buffer = GssApi::GssLib::Buffer.new
       buffer_pointer = pointerof(buffer)
-      mechanism = invoker.invoke do |minor_pointer|
-        status = GssApi::GssLib.gss_display_name(minor_pointer,
-                                                 @structure,
-                                                 buffer_pointer,
-                                                 out mechanism)
-        {status, mechanism}
-      end
+      GssApi::Functions.gss_display_name @structure,
+                                         buffer_pointer
       message = String.new(buffer.value)
       minor = uninitialized UInt32
       # String creates a copy, so need to free this
