@@ -19,11 +19,11 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 ifneq ($(CRYSTAL_LINK_FLAGS),)
-	CRYSTAL_LINK_FLAGS = --link-flags "$(CRYSTAL_LINK_FLAGS)"
+	CRYSTAL_LINK_STR = --link-flags "$(CRYSTAL_LINK_FLAGS)"
 endif
 
 kerbclient: Main.cr gssapi/*.cr
-	crystal build $(DEBUG_FLAGS) $(CRYSTAL_LINK_FLAGS) Main.cr -o kerbclient
+	crystal build $(DEBUG_FLAGS) $(CRYSTAL_LINK_STR) Main.cr -o kerbclient
 
 clean:
 	rm -rf kerbclient
