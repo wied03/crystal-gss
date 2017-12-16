@@ -116,6 +116,10 @@ module GssApi
                          input_name       : NameStruct,
                          output_buffer    : Buffer*,
                          output_type      : GssMechanism*) : MajorStatus
+
+    fun gss_str_to_oid(minor_status_ptr : StatusPtr,
+                       buffer           : Buffer*,
+                       mechanism        : GssMechanism*) : MajorStatus
   end
 
   module Functions
@@ -124,7 +128,7 @@ module GssApi
                     {% for param in params %}
                         {% if param != output_mapping[0] %} {{param}}, {% end %}
                     {% end %}
-                  )
+                  ) : {{output_mapping[1]}}
         invoker = GssApi::FunctionInvoker({{output_mapping[1]}}).new("{{name}}")
         invoker.invoke do |minor_pointer|
           status = GssApi::GssLib.{{name}}(minor_pointer,
@@ -179,6 +183,11 @@ module GssApi
                         credential_id,
                         actual_mechs,
                         time_rec
+
+    gss_return_function gss_str_to_oid,
+                        {mechanism, GssApi::GssLib::GssMechanism},
+                        buffer,
+                        mechanism
 
     gss_void_function gss_release_name,
                       name_structure
