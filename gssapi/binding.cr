@@ -115,20 +115,19 @@ module GssApi
   end
 
   module Functions
-    macro gss_return_function(name, return_type, *params)
+    macro gss_return_function(name, output_mapping, *params)
       def self.{{name}}(
                     {% for param in params %}
-                        {{param}},
+                        {% if param != output_mapping[0] %} {{param}}, {% end %}
                     {% end %}
                   )
-        invoker = GssApi::FunctionInvoker({{return_type}}).new("{{name}}")
+        invoker = GssApi::FunctionInvoker({{output_mapping[1]}}).new("{{name}}")
         invoker.invoke do |minor_pointer|
           status = GssApi::GssLib.{{name}}(minor_pointer,
                                           {% for param in params %}
-                                          {{param}},
-                                          {% end %}
-                                          out output)
-          {status, output}
+                                          {% if param == output_mapping[0] %} out {% end %} {{param}},
+                                          {% end %})
+          {status, {{output_mapping[0]}}}
         end
       end
     end
@@ -150,24 +149,40 @@ module GssApi
     end
 
     gss_return_function gss_import_name,
-                        GssApi::GssLib::NameStruct,
+                        {output_name, GssApi::GssLib::NameStruct},
                         buffer,
-                        mechanism
+                        mechanism,
+                        output_name
 
     gss_return_function gss_canonicalize_name,
-                        GssApi::GssLib::NameStruct,
+                        {output_name, GssApi::GssLib::NameStruct},
                         name_structure,
-                        mechanism
+                        mechanism,
+                        output_name
 
     gss_return_function gss_display_name,
-                        GssApi::GssLib::GssMechanism,
+                        {output_type, GssApi::GssLib::GssMechanism},
                         input_name,
-                        output_buffer
+                        output_buffer,
+                        output_type
+
+    gss_return_function gss_acquire_cred,
+                        {credential_id, GssApi::GssLib::CredentialStruct},
+                        name,
+                        time,
+                        desired_mechs,
+                        cred_usage,
+                        credential_id,
+                        actual_mechs,
+                        time_rec
 
     gss_void_function gss_release_name,
                       name_structure
 
     gss_void_function gss_release_buffer,
                       buffer_pointer
+
+    gss_void_function gss_release_cred,
+                      cred_pointer
   end
 end

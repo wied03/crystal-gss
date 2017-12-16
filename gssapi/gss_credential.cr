@@ -10,18 +10,12 @@ module GssApi
       desired_mechs = GssApi::GssLib::OidSet.new
       desired_mechs.count = 0
       desired_mechs.elements = nil
-      invoker = GssApi::FunctionInvoker(GssApi::GssLib::CredentialStruct).new("gss_acquire_cred")
-      @structure = invoker.invoke do |minor_pointer|
-        status = GssApi::GssLib.gss_acquire_cred(minor_pointer,
-                                                 name.structure,
-                                                 0, # default time of 0
-                                                 pointerof(desired_mechs),
-                                                 usage_flags,
-                                                 out credential,
-                                                 nil,
-                                                 nil)
-        {status, credential}
-      end
+      @structure = GssApi::Functions.gss_acquire_cred(name.structure,
+                                                      0, # default time of 0
+                                                      pointerof(desired_mechs),
+                                                      usage_flags,
+                                                      nil,
+                                                      nil)
     end
 
     def finalize
@@ -29,11 +23,7 @@ module GssApi
       @closed = true
       puts "Cleaning up credential"
       begin
-        invoker = GssApi::VoidFunctionInvoker.new("gss_release_cred")
-        invoker.invoke do |minor_pointer|
-          GssApi::GssLib.gss_release_cred(minor_pointer,
-                                          pointerof(@structure))
-        end
+        GssApi::Functions.gss_release_cred pointerof(@structure)
       rescue
         nil
       end
