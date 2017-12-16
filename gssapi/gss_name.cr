@@ -35,10 +35,8 @@ module GssApi
       GssApi::Functions.gss_display_name @structure,
                                          buffer_pointer
       message = String.new(buffer.value)
-      minor = uninitialized UInt32
       # String creates a copy, so need to free this
-      GssApi::GssLib.gss_release_buffer(pointerof(minor),
-                                        buffer_pointer)
+      GssApi::Functions.gss_release_buffer(buffer_pointer)
       io << "<GssName: '#{message}'>"
     end
 
@@ -47,11 +45,7 @@ module GssApi
       @closed = true
       puts "Cleaning up name"
       begin
-        invoker = GssApi::VoidFunctionInvoker.new("gss_release_name")
-        invoker.invoke do |minor_pointer|
-          GssApi::GssLib.gss_release_name(minor_pointer,
-                                          pointerof(@structure))
-        end
+        GssApi::Functions.gss_release_name pointerof(@structure)
       rescue
         nil
       end
