@@ -1,14 +1,22 @@
 module GssApi
-  @[Link("krb5-gssapi")]
+  # On Linux, Crystal's GC lib tries to find the com_err lib but probably due to no indirect linking, it doesn't
+  # find a symbol, which is present in com_err
+  # If we add com_err (dependent) after gc (requester), then it finds it
+
+  @[Link(ldflags: "-lgc -lcom_err `pkg-config krb5-gssapi --libs`")]
   lib GssLib
-    # TODO: Should this be packed on Linux? GSSLib only does it on Mac
+    # MIT KRB5 GSS on Mac packs Structs
+    {% if flag?(:apple) %}
     @[Packed]
+    {% end %}
     struct Buffer
       length : LibC::SizeT
       value  : UInt8*
     end
 
+    {% if flag?(:apple) %}
     @[Packed]
+    {% end %}
     struct Oid
       length : UInt32
       elements : Void*
@@ -16,7 +24,9 @@ module GssApi
 
     alias GssMechanism = GssLib::Oid*
 
+    {% if flag?(:apple) %}
     @[Packed]
+    {% end %}
     struct OidSet
       count : LibC::SizeT
       elements : GssMechanism
