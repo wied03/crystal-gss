@@ -1,18 +1,22 @@
 module GssApi
   @[Link("krb5-gssapi")]
   lib GssLib
+    # TODO: Should this be packed on Linux? GSSLib only does it on Mac
+    @[Packed]
     struct Buffer
       length : LibC::SizeT
-      value : UInt8*
+      value  : UInt8*
     end
 
+    @[Packed]
     struct Oid
       length : UInt32
       elements : Void*
     end
 
-    type GssMechanism = GssLib::Oid*
+    alias GssMechanism = GssLib::Oid*
 
+    @[Packed]
     struct OidSet
       count : LibC::SizeT
       elements : GssMechanism
