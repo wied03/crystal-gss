@@ -9,6 +9,10 @@ module GssApi
   {% end %}
   lib GssLib
     # MIT KRB5 GSS on Mac packs Structs, LLVM flags for Mac are x86_64-apple-darwin17.0.0
+    # See line 46 in gssapi.h
+    #if TARGET_OS_MAC
+    #    pragma pack(push,2)
+    #endif
     {% if flag?(:apple) %}
     @[Packed]
     {% end %}
