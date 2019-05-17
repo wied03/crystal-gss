@@ -1,10 +1,10 @@
-FROM ubuntu:17.10
+FROM ubuntu:18.04
 
-# Only need dirmngr to add the Crystal key (09617FD37CC06B54) and this is a slow process
+# Only need gpg/curl to add the Crystal key
 RUN apt-get update \
-  && apt-get install -y dirmngr ca-certificates \
-  && apt-key adv --keyserver keys.gnupg.net --recv-keys 09617FD37CC06B54 \
-  && apt-get autoremove -y dirmngr \
+  && apt-get install -y gpg curl \
+  && curl -sL "https://keybase.io/crystal/pgp_keys.asc" | apt-key add - \
+  && apt-get autoremove -y gpg curl \
   && echo "deb https://dist.crystal-lang.org/apt crystal main" > /etc/apt/sources.list.d/crystal.list \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

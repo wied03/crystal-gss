@@ -1,4 +1,4 @@
-FROM ubuntu:17.10
+FROM ubuntu:18.04
 
 # Winbind is needed for Samba to work properly as an AD domain controller
 # Don't strictly need the krb5-user package on the KDC because Samba provides most of what we need
